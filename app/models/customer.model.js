@@ -1,12 +1,17 @@
 const sql = require("./db.js");
 
-// constructor
 const Customer = function(customer) {
   this.username = customer.username;
     this.venuename = customer.venuename;
     this.state = customer.state;
     this.city = customer.city;
     this.masterlabcount	 = customer.masterlabcount;
+};
+
+const LabCount = function(labdetails){
+  this.vid = labdetails.vid;
+  this.labno = labdetails.labno;
+  this.labcount = labdetails.labcount;
 };
 
 Customer.create = (newCustomer, result) => {
@@ -35,6 +40,23 @@ Customer.getAllStates = result => {
   });
 };
 
+Customer.findById = (vid, result) => {
+  sql.query(`SELECT pid, vid, labno, labcount FROM tbl_audit_photos WHERE vid = ${vid}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("Venue Id details: ", res[0]);
+      result(null, res);
+      return;
+    }
+    result({ kind: "not_found" }, null);
+  });
+};
+
 Customer.updateById = (id, customer, result) => {
   sql.query(
     "UPDATE tbl_venue_audit SET masterlabcount = ? WHERE vid = ?",
@@ -57,4 +79,20 @@ Customer.updateById = (id, customer, result) => {
   );
 };
 
-module.exports = Customer;
+LabCount.updatecount = (labdetails, result) => {
+  sql.query("INSERT INTO tbl_audit_photos SET ?", labdetails, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+    result(null, { id: res.insertId, ...labdetails });
+  });
+};
+
+module.exports = {
+  Customer,
+  LabCount
+};
+// module.exports = Customer;
+// module.exportslab = LabCount;
