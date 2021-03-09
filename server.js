@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const venue = require("./app/routes/customer.routes.js");
+const venuephotos = require("./app/routes/image.routes.js");
 const app = express();
 
 // parse requests of content-type - application/json
@@ -13,8 +14,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ message: "Application Test." });
 });
+app.use("/venue",venue);
+app.use("/venuephotos",venuephotos);  
 
-require("./app/routes/customer.routes.js")(app);
+
 // require("./app/routes/lab.routes.js")(app);
 
 // set port, listen for requests

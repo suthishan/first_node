@@ -7,14 +7,52 @@ const LabCount = function(labdetails){
   }
 
   LabCount.updatecount = (labdetails, result) => {
-    sql.query("INSERT INTO tbl_audit_photos SET ?", labdetails, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
+    console.log(labdetails)
+    sql.query(`SELECT * FROM tbl_audit_photos1 WHERE vid =  ${labdetails.vid} && labno= ${labdetails.labno}`,(err, res) => {
+      // console.log(err)
+      // console.log(res)
+      if(res.length>0){
+        sql.query(`UPDATE tbl_audit_photos1 SET labcount = ${labdetails.labcount} where labno = ${labdetails.labno} && vid =  ${labdetails.vid}`, (err, res) => {
+              if (err) {
+                console.log("error: ", err);
+                result(err, null);
+                return;
+              }
+              result(null, { id: res.insertId, ...labdetails });
+            });
+      }else{
+        sql.query(`INSERT INTO tbl_audit_photos1 SET ?`, labdetails, (err, res) => {
+              if (err) {
+                console.log("error: ", err);
+                result(err, null);
+                return;
+              }
+              result(null, { id: res.insertId, ...labdetails });
+            });
       }
-      result(null, { id: res.insertId, ...labdetails });
+      // console.log(check)
     });
+    // console.log(check)
+  //   if(check>0){
+    
+  //   sql.query("UPDATE INTO tbl_audit_photos SET labno = ? where vid = ?", [labdetails.labno, labdetails.vid], (err, res) => {
+  //     if (err) {
+  //       console.log("error: ", err);
+  //       result(err, null);
+  //       return;
+  //     }
+  //     result(null, { id: res.insertId, ...labdetails });
+  //   });
+  // }else{
+  //   sql.query("INSERT INTO tbl_audit_photos SET ?", labdetails, (err, res) => {
+  //     if (err) {
+  //       console.log("error: ", err);
+  //       result(err, null);
+  //       return;
+  //     }
+  //     result(null, { id: res.insertId, ...labdetails });
+  //   });
+  // }
   };
 
   module.exports = LabCount;
