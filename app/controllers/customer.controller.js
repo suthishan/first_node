@@ -18,10 +18,7 @@ exports.create = (req, res) => {
 
   Customer.create(customer, (err, data) => {
     if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Customer."
-      });
+      res.status(500).json({status:'0',message:'Some error occurred'});
     else res.json({status:'1',message:'data Inserted',data:data});
   });
 };

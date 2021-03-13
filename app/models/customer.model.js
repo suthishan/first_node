@@ -41,7 +41,7 @@ Customer.getAllStates = result => {
 };
 
 Customer.findById = (customer, result) => {
-  var check = sql.query(`SELECT pid, vid, labno, labcount FROM tbl_audit_photos1 WHERE vid = '${customer}' ORDER BY labno ASC`, 
+  var check = sql.query(`SELECT pid, vid, labno, labcount FROM tbl_audit_photos WHERE vid = '${customer}' ORDER BY labno ASC`, 
   
   (err, res) => {
     console.log(check.sql)

@@ -5,11 +5,12 @@ const fs = require('fs');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
-        console.log(req.params)
+        // console.log(req.params)
         var vid = req.params.vid
         var labno = req.params.labno                            
-        var destination = 'app/venuephotos/'+vid;
-        
+        var destination = '../venueportal/assets/auditphotos/'+vid;
+        // E:\xampp\htdocs\venueportal\assets\auditphotos
+        console.log(destination)
         var stat = null;
         try {
             stat = fs.statSync(destination);
@@ -29,7 +30,15 @@ const storage = multer.diskStorage({
     filename: function(req, file, cb){
         var vid = req.params.vid
         var labno = req.params.labno
+        var valuett = vid+'-lab'+labno+'-'+new Date().getTime();
+        
+        
+
+        // var str= valuett.join("|")
+        // console.log(file)
         cb(null, vid+'-lab'+labno+'-'+new Date().getTime() + path.extname(file.originalname));
+        
+
     }
 });
 
@@ -53,8 +62,10 @@ const upload = multer({
     filefilter:filefilter
 });
 
+
 // var uploadFilesMiddleware = util.promisify(upload);
 
 module.exports = {
+    
     upload:upload
 }
